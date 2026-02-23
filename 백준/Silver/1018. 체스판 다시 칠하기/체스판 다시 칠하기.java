@@ -4,67 +4,64 @@ import java.io.*;
 
 class Main {
 
-    public static boolean[][] arr;
-    public static int min = 64;
+    static boolean[][] board;
+    static int min = 64;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        int N = Integer.parseInt(st.nextToken()); // 가로
+        int M = Integer.parseInt(st.nextToken()); // 세로
 
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
-
-        arr = new boolean[N][M];
+        board = new boolean[N][M];
 
         for (int i = 0; i < N; i++) {
             String str = br.readLine();
-
             for (int j = 0; j < M; j++) {
                 if (str.charAt(j) == 'W') {
-                    arr[i][j] = true;
+                    board[i][j] = true;
                 } else {
-                    arr[i][j] = false;
+                    board[i][j] = false;
                 }
             }
         }
 
-        // 탐색 가능한 시작점의 끝 범위
-        int x_start = N - 7;
-        int y_start = M - 7;
+        // 탐색 시작 가능한 최대 범위
+        int start_n = N - 7;
+        int start_m = M - 7;
 
-        for (int i = 0; i < x_start; i++) {
-            for (int j = 0; j < y_start; j++) {
-                find(i, j);
+        for(int i = 0; i < start_n; i++) {
+            for(int j = 0; j < start_m; j++) {
+                search(i, j);
             }
         }
 
         System.out.println(min);
     }
 
-    public static void find(int x, int y) {
-        // 탐색할 마지막 점
-        int x_end = x + 8;
-        int y_end = y + 8;
-        int count = 0;
+    public static void search(int x, int y) {
+        int end_n = x + 8;
+        int end_m = y + 8;
+        int count = 0; // 바꿔야 하는 칸의 갯수
 
-        // 맨 처음 칸의 색깔
-        boolean TF = arr[x][y];
+        // 시작 칸
+        boolean first = board[x][y];
 
-        for(int i = x; i < x_end; i++) {
-            for(int j = y; j < y_end; j++) {
-                if(arr[i][j] != TF) {
+        for(int i = x; i < end_n; i++) {
+            for(int j = y; j < end_m; j++) {
+                if(board[i][j] != first) {
                     count++;
                 }
 
-                // 바로 다음 칸 색깔 바꾸기
-                TF = (!TF);
+                // 다음 칸 색깔 전환 (확인용)
+                first = (!first);
             }
 
-            // 다음 줄 처음 칸 색깔 바꾸기
-            TF = (!TF);
+            // 다음 줄 색깔 전환 (확인용)
+            first = (!first);
         }
 
-        // 전체 칸의 개수는 64개 이므로, 색깔이 바뀔 경우 색칠 횟수는 64에서 원래 횟수 빼기
+        // 최대 64개를 칠해야 하므로 첫번째 칸의 색깔이 전환되는 경우는 64 - count
         count = Math.min(count, 64 - count);
 
         min = Math.min(count, min);
