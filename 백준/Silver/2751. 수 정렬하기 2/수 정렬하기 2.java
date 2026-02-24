@@ -5,19 +5,22 @@ import java.io.*;
 class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
+
         int N = Integer.parseInt(br.readLine());
-        int[] arr = new int[N];
+        int[] arr = new int[2000001];
 
         for(int i = 0; i < N; i++) {
-            arr[i] = Integer.parseInt(br.readLine());
-        }
-        Arrays.sort(arr);
-
-        StringBuilder sb = new StringBuilder();
-        for(int i : arr) {
-            sb.append(i).append("\n");
+            int n = Integer.parseInt(br.readLine());
+            arr[n + 1000000]++;
         }
 
-        System.out.println(sb);
+        for(int i = 0; i < arr.length; i++) {
+            if(arr[i] == 1) {
+                sb.append(i - 1000000).append("\n");
+            }
+        }
+
+        System.out.print(sb);
     }
 }
